@@ -1,0 +1,230 @@
+import os
+
+# Clear terminal
+os.system('cls || clear')
+
+# =========================
+# Data awal
+# =========================
+akun = [
+    ["admin", "1234", "admin"],
+    ["user", "abcd", "user"]
+]
+
+# Nested list untuk data game: [nama, genre, tahun]
+games = [
+    ["Genshin Impact", "RPG", "2020"],
+    ["Valorant", "FPS", "2020"]
+]
+
+# =========================
+# Menu utama
+# =========================
+while True:
+    os.system('cls || clear')
+    print("🎮 SELAMAT DATANG DI GAME MANAGEMENT 🎮".center(60))
+    print("=" * 60)
+    print("[1] Login")
+    print("[2] Register")
+    print("[0] Keluar")
+
+    pilih = input("Pilih menu: ")
+    while not pilih.isdigit():
+        pilih = input("Input tidak valid! Pilih 1, 2, atau 0: ")
+
+    pilih = int(pilih)
+    os.system('cls || clear')
+
+    # =========================
+    # LOGIN
+    # =========================
+    if pilih == 1:
+        print("=== LOGIN ===")
+        username = input("Username: ")
+        password = input("Password: ")
+
+        role = None
+        for a in akun:
+            if a[0] == username and a[1] == password:
+                role = a[2]
+                break
+
+        if role is None:
+            print("❌ Username atau password salah!")
+            input("\nTekan Enter untuk lanjut...")
+            continue
+
+        os.system('cls || clear')
+        print(f"✅ Login berhasil sebagai {role.capitalize()}\n")
+
+        # =========================
+        # MENU ADMIN
+        # =========================
+        if role == "admin":
+            while True:
+                print("=== MENU ADMIN ===")
+                print("[1] Lihat Daftar Game")
+                print("[2] Tambah Game")
+                print("[3] Edit Game")
+                print("[4] Hapus Game")
+                print("[0] Logout")
+                admin_menu = input("Pilih menu: ")
+
+                while not admin_menu.isdigit():
+                    admin_menu = input("Input tidak valid! Pilih 0–4: ")
+                admin_menu = int(admin_menu)
+                os.system('cls || clear')
+
+                # Read
+                if admin_menu == 1:
+                    print("=== DAFTAR GAME ===")
+                    if len(games) == 0:
+                        print("Belum ada game terdaftar.")
+                    else:
+                        for i, g in enumerate(games):
+                            print(f"{i+1}. {g[0]} | Genre: {g[1]} | Tahun: {g[2]}")
+                    input("\nTekan Enter untuk lanjut...")
+
+                # Create
+                elif admin_menu == 2:
+                    print("=== TAMBAH GAME ===")
+                    nama = input("Nama game: ")
+                    genre = input("Genre: ")
+                    tahun = input("Tahun rilis: ")
+
+                    if nama.strip() == "" or genre.strip() == "" or not tahun.isdigit():
+                        print("❌ Input tidak valid!")
+                    else:
+                        games.append([nama, genre, tahun])
+                        print(f"✅ Game '{nama}' berhasil ditambahkan!")
+                    input("\nTekan Enter untuk lanjut...")
+
+                # Update
+                elif admin_menu == 3:
+                    print("=== EDIT GAME ===")
+                    if len(games) == 0:
+                        print("Tidak ada game untuk diedit.")
+                        input("\nTekan Enter untuk lanjut...")
+                        continue
+
+                    for i, g in enumerate(games):
+                        print(f"[{i+1}] {g[0]} | {g[1]} | {g[2]}")
+
+                    pilih_edit = input("\nPilih nomor game yang ingin diedit: ")
+                    while not pilih_edit.isdigit() or int(pilih_edit) < 1 or int(pilih_edit) > len(games):
+                        pilih_edit = input("Input tidak valid! Pilih sesuai nomor game: ")
+
+                    idx = int(pilih_edit) - 1
+                    nama = input("Nama baru (kosongkan jika tidak diubah): ")
+                    genre = input("Genre baru (kosongkan jika tidak diubah): ")
+                    tahun = input("Tahun baru (kosongkan jika tidak diubah): ")
+
+                    if nama.strip() != "":
+                        games[idx][0] = nama
+                    if genre.strip() != "":
+                        games[idx][1] = genre
+                    if tahun.isdigit():
+                        games[idx][2] = tahun
+
+                    print("✅ Data game berhasil diperbarui!")
+                    input("\nTekan Enter untuk lanjut...")
+
+                # Delete
+                elif admin_menu == 4:
+                    print("=== HAPUS GAME ===")
+                    if len(games) == 0:
+                        print("Tidak ada game untuk dihapus.")
+                        input("\nTekan Enter untuk lanjut...")
+                        continue
+
+                    for i, g in enumerate(games):
+                        print(f"[{i+1}] {g[0]} | {g[1]} | {g[2]}")
+
+                    pilih_hapus = input("\nPilih nomor game yang ingin dihapus: ")
+                    while not pilih_hapus.isdigit() or int(pilih_hapus) < 1 or int(pilih_hapus) > len(games):
+                        pilih_hapus = input("Input tidak valid! Pilih sesuai nomor game: ")
+
+                    idx = int(pilih_hapus) - 1
+                    hapus_nama = games[idx][0]
+                    del games[idx]
+                    print(f"✅ Game '{hapus_nama}' berhasil dihapus!")
+                    input("\nTekan Enter untuk lanjut...")
+
+                elif admin_menu == 0:
+                    print("👋 Logout berhasil!")
+                    break
+
+                else:
+                    print("❌ Pilihan tidak tersedia!")
+                    input("\nTekan Enter untuk lanjut...")
+
+        # =========================
+        # MENU USER
+        # =========================
+        elif role == "user":
+            while True:
+                print("=== MENU USER ===")
+                print("[1] Lihat Daftar Game")
+                print("[0] Logout")
+                user_menu = input("Pilih menu: ")
+
+                while not user_menu.isdigit():
+                    user_menu = input("Input tidak valid! Pilih 0 atau 1: ")
+                user_menu = int(user_menu)
+                os.system('cls || clear')
+
+                if user_menu == 1:
+                    print("=== DAFTAR GAME ===")
+                    if len(games) == 0:
+                        print("Belum ada game terdaftar.")
+                    else:
+                        for i, g in enumerate(games):
+                            print(f"{i+1}. {g[0]} | Genre: {g[1]} | Tahun: {g[2]}")
+                    input("\nTekan Enter untuk lanjut...")
+
+                elif user_menu == 0:
+                    print("👋 Logout berhasil!")
+                    break
+                else:
+                    print("❌ Pilihan tidak tersedia!")
+                    input("\nTekan Enter untuk lanjut...")
+
+    # =========================
+    # REGISTER
+    # =========================
+    elif pilih == 2:
+        print("=== REGISTER ===")
+        username = input("Buat username: ")
+
+        # Cek apakah username sudah ada
+        ada = False
+        for a in akun:
+            if a[0] == username:
+                ada = True
+                break
+
+        if ada:
+            print("❌ Username sudah digunakan!")
+        else:
+            password = input("Buat password: ")
+
+            print("\nPilih role:")
+            print("[0] Admin")
+            print("[1] User")
+            pilih_role = input(": ")
+            while not pilih_role.isdigit() or int(pilih_role) not in [0, 1]:
+                pilih_role = input("Input tidak valid! Masukkan 0 untuk admin atau 1 untuk user: ")
+
+            role = "admin" if int(pilih_role) == 0 else "user"
+            akun.append([username, password, role])
+            print(f"✅ Akun '{username}' berhasil dibuat sebagai '{role}'!")
+
+        input("\nTekan Enter untuk lanjut...")
+
+    elif pilih == 0:
+        print("👋 Terima kasih telah menggunakan Game Management!")
+        break
+
+    else:
+        print("❌ Pilihan tidak tersedia!")
+        input("\nTekan Enter untuk lanjut...")
